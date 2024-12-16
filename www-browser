@@ -21,9 +21,6 @@ ENCODED_COMMAND=$(printf '%s' "$COMMAND" | jq -sRr @uri)
 
 CURL_COMMAND="curl \"${EXEC_SERVER_URL}?command=${ENCODED_COMMAND}\""
 
-echo "Generated curl command:"
-echo "$CURL_COMMAND"
-
-# Optionally execute the curl command
-echo "Executing the curl command..."
 eval "$CURL_COMMAND"
+
+echo
