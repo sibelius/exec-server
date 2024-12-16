@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Script to generate a curl command to use the /open-url endpoint
-# Usage: ./generate-curl.sh <url>
+# open browse using exec-server
+# Usage: ./www-browser.sh <url>
 
 # Replace with your server's base URL
 EXEC_SERVER_URL="http://localhost:7771/exec"
