@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.woovi.execserver</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/sibeliusseraphini/Dev/entria/woovi-projects/opensource/exec-server/start-exec-server.sh</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true/>
+    
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/tmp/com.woovi.execserver.stdout</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/com.woovi.execserver.stderr</string>
+</dict>
+</plist>

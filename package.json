@@ -1,25 +1,25 @@
 {
   "name": "exec-server",
-  "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "type": "module",
-  "scripts": {
-    "start": "node --experimental-strip-types --watch src/index.ts"
-  },
-  "keywords": [],
+  "version": "1.0.0",
   "author": "",
-  "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
     "@koa/router": "^13.1.0",
-    "@types/add": "~2.0.3",
+    "koa": "^2.15.3",
+    "koa-bodyparser": "^4.4.1",
+    "koa-logger": "^3.2.1"  
+  },
+  "devDependencies": {
     "@types/koa": "~2.15.0",
     "@types/koa-bodyparser": "~5.0.2",
     "@types/koa-logger": "~3.1.5",
-    "@types/koa__router": "~12.0.4",
-    "add": "^2.0.6",
-    "koa": "^2.15.3",
-    "koa-bodyparser": "^4.4.1",
-    "koa-logger": "^3.2.1"
-  }
+    "@types/koa__router": "~12.0.4"
+  },
+  "keywords": [],
+  "license": "ISC",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --experimental-strip-types --watch src/index.ts"
+  },
+  "type": "module"
 }
