@@ -12,7 +12,8 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "noEmit": true,
-    "types": ["node"]
+    "types": ["node"],
+    "allowImportingTsExtensions": true
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]
