@@ -1,26 +1,23 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# open browse using exec-server
-# Usage: ./www-browser.sh <url>
+# www-browser — open URLs via exec-server
+# Install on a remote machine to forward browser opens to your local Mac
 
-# Replace with your server's base URL
-EXEC_SERVER_URL="http://localhost:7771/exec"
+HOST="${EXEC_SERVER_HOST:-127.0.0.1}"
+PORT="${EXEC_SERVER_PORT:-7771}"
+EXEC_SERVER_URL="http://${HOST}:${PORT}/exec"
 
-# Check if a URL was provided
-if [ -z "$1" ]; then
-  echo "Usage: $0 <url>"
+if [ -z "${1:-}" ]; then
+  echo "Usage: www-browser <url>"
+  echo ""
+  echo "Opens a URL on the machine running exec-server."
+  echo "Configure with EXEC_SERVER_HOST and EXEC_SERVER_PORT env vars."
   exit 1
 fi
 
-# Encode the URL to make it safe for curl
 ENCODED_URL=$(printf '%s' "$1" | jq -sRr @uri)
-
 COMMAND="open \"$ENCODED_URL\""
-
 ENCODED_COMMAND=$(printf '%s' "$COMMAND" | jq -sRr @uri)
 
-CURL_COMMAND="curl \"${EXEC_SERVER_URL}?command=${ENCODED_COMMAND}\""
-
-eval "$CURL_COMMAND"
-
+curl -s "${EXEC_SERVER_URL}?command=${ENCODED_COMMAND}"
 echo

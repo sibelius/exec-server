@@ -30,8 +30,10 @@ router.all('/exec', async (ctx, next) => {
     decodedCommand
   })
 
-  const timeout = new Promise<never>((_, reject) => 
-    setTimeout(() => reject(new Error('Command execution timed out after 30 seconds')), 30000)
+  const timeoutMs = parseInt(process.env.EXEC_SERVER_TIMEOUT || '30000', 10);
+
+  const timeout = new Promise<never>((_, reject) =>
+    setTimeout(() => reject(new Error(`Command execution timed out after ${timeoutMs}ms`)), timeoutMs)
   );
 
   try {
