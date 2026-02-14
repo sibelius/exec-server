@@ -1,17 +1,13 @@
 import { createServer } from 'http';
 import { app } from './app.ts'
 
-let requestListener = app.callback();
+const PORT = parseInt(process.env.EXEC_SERVER_PORT || '7771', 10);
+const HOST = process.env.EXEC_SERVER_HOST || '127.0.0.1';
 
-const PORT = 7771;
+const requestListener = app.callback();
 
-(async () => {
-  console.log('working')
+const server = createServer(requestListener);
 
-  const server = createServer(requestListener);
-
-  server.listen(PORT, () => {
-    // eslint-disable-next-line
-    console.log(`Server started on port http://localhost:${PORT}`);
-  });
-})();
+server.listen(PORT, HOST, () => {
+  console.log(`Server started on http://${HOST}:${PORT}`);
+});
