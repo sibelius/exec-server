@@ -6,6 +6,7 @@ set -euo pipefail
 SERVICE_NAME="exec-server"
 SERVICE_PATH="$HOME/.config/systemd/user/${SERVICE_NAME}.service"
 WWW_BROWSER_DEST="$HOME/.local/bin/www-browser"
+XDG_OPEN_DEST="$HOME/.local/bin/xdg-open"
 DESKTOP_PATH="$HOME/.local/share/applications/exec-server-browser.desktop"
 
 echo "=== exec-server Linux uninstaller ==="
@@ -34,7 +35,13 @@ if [ -f "$WWW_BROWSER_DEST" ]; then
   rm "$WWW_BROWSER_DEST"
 fi
 
-# Remove desktop entry
+# Remove xdg-open shim (only ours, never a system one)
+if [ -f "$XDG_OPEN_DEST" ] && grep -q "exec-server" "$XDG_OPEN_DEST"; then
+  echo "Removing xdg-open shim: $XDG_OPEN_DEST"
+  rm "$XDG_OPEN_DEST"
+fi
+
+# Remove desktop entry (created by older installers)
 if [ -f "$DESKTOP_PATH" ]; then
   echo "Removing desktop entry: $DESKTOP_PATH"
   rm "$DESKTOP_PATH"

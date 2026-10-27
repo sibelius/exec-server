@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# xdg-open — forward http(s) URLs to www-browser (exec-server)
+# Install on a headless remote machine so tools that call xdg-open
+# (gh, CLIs, AI agents) open URLs in your local browser.
+# With a graphical session it defers to the system xdg-open.
+
+if [ -n "${DISPLAY:-}${WAYLAND_DISPLAY:-}" ]; then
+  SELF="$(readlink -f "$0")"
+  while IFS= read -r CANDIDATE; do
+    if [ "$(readlink -f "$CANDIDATE")" != "$SELF" ]; then
+      exec "$CANDIDATE" "$@"
+    fi
+  done < <(type -ap xdg-open)
+fi
+
+if [ -z "${1:-}" ]; then
+  echo "Usage: xdg-open <url>" >&2
+  exit 1
+fi
+
+case "$1" in
+  http://* | https://*) exec www-browser "$1" ;;
+  *)
+    echo "xdg-open: only http(s) URLs can be forwarded to exec-server, got '$1'" >&2
+    exit 3
+    ;;
+esac
