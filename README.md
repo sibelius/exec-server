@@ -104,7 +104,7 @@ This will:
 - Create and enable a systemd user service
 - Enable lingering for persistence across logouts
 - Install `www-browser` to `~/.local/bin`
-- Optionally create an xdg-open desktop entry
+- Install an `xdg-open` shim to `~/.local/bin` that forwards http(s) URLs to `www-browser` (defers to the system `xdg-open` when `DISPLAY`/`WAYLAND_DISPLAY` is set)
 
 To uninstall:
 
@@ -124,7 +124,16 @@ cp www-browser ~/.local/bin/www-browser
 chmod +x ~/.local/bin/www-browser
 ```
 
-Then set it as your default browser:
+Install the `xdg-open` shim too, so tools that shell out to `xdg-open` (gh, CLIs, AI agents on a headless box) open in your local browser:
+
+```bash
+cp xdg-open ~/.local/bin/xdg-open
+chmod +x ~/.local/bin/xdg-open
+```
+
+`~/.local/bin` must come before `/usr/bin` in `PATH`. Only http(s) URLs are forwarded; a local file path exits 3.
+
+Then set it as your default browser for tools that read `$BROWSER` instead:
 
 ```bash
 export BROWSER=www-browser

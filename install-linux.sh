@@ -9,6 +9,7 @@ SERVICE_NAME="exec-server"
 SERVICE_DIR="$HOME/.config/systemd/user"
 SERVICE_PATH="$SERVICE_DIR/${SERVICE_NAME}.service"
 WWW_BROWSER_DEST="$HOME/.local/bin/www-browser"
+XDG_OPEN_DEST="$HOME/.local/bin/xdg-open"
 
 echo "=== exec-server Linux installer ==="
 echo ""
@@ -86,30 +87,23 @@ mkdir -p "$(dirname "$WWW_BROWSER_DEST")"
 cp "$SCRIPT_DIR/www-browser" "$WWW_BROWSER_DEST"
 chmod +x "$WWW_BROWSER_DEST"
 
-# Optionally generate xdg-open desktop entry
-read -rp "Create xdg-open desktop entry for www-browser? [y/N] " CREATE_DESKTOP
-if [[ "${CREATE_DESKTOP,,}" == "y" ]]; then
-  DESKTOP_DIR="$HOME/.local/share/applications"
-  mkdir -p "$DESKTOP_DIR"
-  cat > "$DESKTOP_DIR/exec-server-browser.desktop" <<EOF
-[Desktop Entry]
-Version=1.0
-Name=exec-server Browser
-Exec=${WWW_BROWSER_DEST} %u
-Terminal=false
-Type=Application
-MimeType=x-scheme-handler/http;x-scheme-handler/https;
-EOF
-  xdg-mime default exec-server-browser.desktop x-scheme-handler/http 2>/dev/null || true
-  xdg-mime default exec-server-browser.desktop x-scheme-handler/https 2>/dev/null || true
-  echo "Desktop entry created at $DESKTOP_DIR/exec-server-browser.desktop"
-fi
+# Install xdg-open shim (headless hosts have no browser; forward to exec-server)
+echo "Installing xdg-open shim to $XDG_OPEN_DEST"
+cp "$SCRIPT_DIR/xdg-open" "$XDG_OPEN_DEST"
+chmod +x "$XDG_OPEN_DEST"
 
 # Ensure ~/.local/bin is in PATH
 if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
   echo ""
   echo "NOTE: Add ~/.local/bin to your PATH:"
   echo "  echo 'export PATH=\"\$HOME/.local/bin:\$PATH\"' >> ~/.bashrc"
+fi
+
+# Tools that read $BROWSER (python webbrowser, git web--browse) skip xdg-open
+if [ "${BROWSER:-}" != "www-browser" ]; then
+  echo ""
+  echo "NOTE: Also set BROWSER for tools that ignore xdg-open:"
+  echo "  echo 'export BROWSER=www-browser' >> ~/.bashrc"
 fi
 
 # Summary
@@ -120,6 +114,7 @@ echo "  Service: $SERVICE_NAME (systemd user)"
 echo "  Unit:    $SERVICE_PATH"
 echo "  Logs:    journalctl --user -u $SERVICE_NAME"
 echo "  Browser: $WWW_BROWSER_DEST"
+echo "  Opener:  $XDG_OPEN_DEST"
 echo ""
 echo "Test with:"
 echo "  curl http://localhost:${EXEC_SERVER_PORT:-7771}/"
